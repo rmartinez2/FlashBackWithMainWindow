@@ -50,51 +50,9 @@ void cvMatViewer::showImg(const Mat &img)
 
 }
 
-void cvMatViewer::isPaused()
-{
-  // playing = false;
-  // pausedTimer->stop();
-
-}
-
-void cvMatViewer::isPlaying()
-{
- //  playing = true;
- //  pausedTimer->start();
-
-
-}
-
-void cvMatViewer::pbAfterPause()
-{
-    if(!holder.isEmpty()){
-
-
-       // uchar* temp = holder->takeFirst();
-        //uchar* nData = (uchar*)malloc(height*width*channels*sizeof(uchar));
 
 
 
-        // qDebug() << "in pbAfterPause "<< temp;
-
-         Mat img = holder.takeFirst();
-
-//         if(temp != NULL){
-//             //qDebug() << "here";
-//             img = Mat(height,width,CV_8UC3,temp,step);
-//         }else{
-//             img = Mat(height,width,CV_8UC3,Scalar::all(0));
-//        }
-
-
-      // Mat img(height,width,CV_8UC3,temp,step);
-
-
-
-
-
-    }
-}
 
 void cvMatViewer::paintEvent(QPaintEvent *event)
 {

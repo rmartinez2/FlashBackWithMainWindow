@@ -40,9 +40,6 @@ void BSDetectionThread::run()
         if(sum < 200000){
 
               qDebug() << "Black Screen Detected";
-          //  emit sendMyMat(temp);
-          //  char Check[50];
-          //  std::cin >> Check;
 
             emit isBlack(true);
 
@@ -50,16 +47,6 @@ void BSDetectionThread::run()
         }else{
             emit isBlack(false);
         }
-
-      //  qDebug() << "Black Screen Sum: " << (long long) sum;
-
-      //  emit sendMyMat(temp);
-        //char Check[50];
-        //std::cin >> Check;
-
-      //  msleep(16.67);
-
-
 
 
     }

@@ -40,10 +40,7 @@
 #include "channelselectionview.h"
 #include "frameglwidget.h"
 
-#include <QByteArray>
-#include <QAudioOutput>
-#include <QAudioFormat>
-#include <QAudioDeviceInfo>
+
 
 
 
@@ -76,8 +73,6 @@ public:
     ~MainWindow();
 
     QTimer *timer, *commercialTimer1, *commercialTimer2, *notesTimer;
-    //cv::VideoCapture cap;
-
 
     FILE *f;
 
@@ -100,7 +95,6 @@ public:
     QBuffer buf;
     QBuffer vBuf;
 
-    //QFile file;
 
     QByteArray data;
     QByteArray vData;
@@ -110,13 +104,13 @@ public:
 
     QGraphicsScene *myScene;
 
-    cvMatViewer /**matViewer,*/ *pipViewer;
-    /*FrameGLWidget*/cvMatViewer *matViewer;
+    cvMatViewer *pipViewer;
+    cvMatViewer *matViewer;
 
     playBackThread *pbThread;
 
     VideoCapture cap;
-    //VideoCapture cap2;
+
 
     VideoWriter writer1;
     VideoWriter writer2;
@@ -136,7 +130,6 @@ public:
     QVector<Mat> ldBuffer2;
     QVector<Mat> crBuffer2;
 
-    //QList<dataHolder*> mainBuffer2;
 
     bool primary;
 
@@ -150,12 +143,6 @@ public:
 
     bool primaryOnComm;
     bool secondaryOnComm;
-
-    QAudioOutput *output;
-    QByteArray buffered;
-    QBuffer aBuf;
-
-
 
     Size sz;
 
@@ -178,7 +165,6 @@ public:
     logoDetectionThread *LDThread2;
     BSDetectionThread *bsDetectThread2;
 
-    MainMenu *main;
     bool mtoggle;
 
     SideMenu *sMenu;
@@ -213,10 +199,6 @@ public:
 
     int vid1FPS, vid2FPS;
 
-    RecordPlayBack *recPBThread;
-
-    QAudioFormat aformat;
-    bool aYes;
 
 public slots:
 
@@ -257,13 +239,8 @@ public slots:
     void cancelAllRecording();
     void setUpPB(const char* playBack);
 
-     void closeNote();
+    void closeNote();
 
-     void getBufferedAudio(QByteArray arry);
-     void setAudioFormat();
-
-     void askForFrames();
-     void parseForPlayBack(QByteArray data, int frameSize);
 
 protected:
     void keyPressEvent(QKeyEvent *a);
@@ -273,7 +250,7 @@ signals:
    void bsbufferFull(bool);
    void breakVthread(bool);
    void bufferReady();
-   void sendForFrames(bool);
+
     
 private:
     Ui::MainWindow *ui;

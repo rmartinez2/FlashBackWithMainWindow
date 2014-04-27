@@ -5,20 +5,14 @@
 #include <QImage>
 #include <QtCore>
 #include <QVector>
-#include <QFont>
-
 #include "iostream"
 
-extern "C"{
-#include "libavcodec/avcodec.h"
-#include "libavutil/avutil.h"
-}
 
 #include "opencv2/core/core.hpp"
 #include "opencv2/highgui/highgui.hpp"
 #include "opencv2/imgproc/imgproc.hpp"
 
-#include "opencv2/gpu/gpu.hpp"
+
 
 using namespace cv;
 using namespace std;

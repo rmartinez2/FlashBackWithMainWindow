@@ -22,9 +22,7 @@ SOURCES += main.cpp\
     recordings.cpp \
     recordingoptions.cpp \
     notificationwidget.cpp \
-    mainmenu.cpp \
     logodetectionthread.cpp \
-    frameglwidget.cpp \
     cvmatviewer.cpp \
     cutratedetectionthread.cpp \
     channelselectionview.cpp \
@@ -40,9 +38,7 @@ HEADERS  += mainwindow.h \
     recordings.h \
     recordingoptions.h \
     notificationwidget.h \
-    mainmenu.h \
     logodetectionthread.h \
-    frameglwidget.h \
     cvmatviewer.h \
     cutratedetectionthread.h \
     channelselectionview.h \

@@ -39,14 +39,10 @@ public:
     int step;
     int channels;
 
-    QList<Mat> holder;
-    QVector<Mat> rewindHolder;
 
-    //std::vector<Mat> test;
 
-    QTimer *pausedTimer;
 
-    pixelDataThread *dataCpy;
+
 
     bool isPIP;
     
@@ -55,9 +51,7 @@ signals:
 public slots:
 
     void showImg(const Mat &img);
-    void isPaused();
-    void isPlaying();
-    void pbAfterPause();
+
 
 
 protected:

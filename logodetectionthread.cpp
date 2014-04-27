@@ -19,8 +19,7 @@ logoDetectionThread::logoDetectionThread(QObject *parent):
 void logoDetectionThread::run()
 {
 
-//    Point p1((int)900, (int)500);
-//    Point p2((int)1100, (int)700);
+
 
     scale = 1;
     delta = 0;
@@ -46,17 +45,12 @@ void logoDetectionThread::run()
     logoSize = gradLogo.cols*gradLogo.rows;
 
 
-    /*IplImage newLogo = gradLogo;
-    cvNormalize(&newLogo,&newLogo,0,255,CV_MINMAX);
-
-    Mat seep1(&newLogo);*/
 
 
     for(int i = 0; i < myMats.size(); i++){
         Mat temp = myMats.at(i);
         Mat cpy = temp(box).clone();
 
-        //imshow("Show Me", temp);
 
 
         GaussianBlur(cpy,cpy,Size(3,3), 0, 0, BORDER_DEFAULT);
@@ -69,16 +63,6 @@ void logoDetectionThread::run()
         convertScaleAbs(gradY,absGradY);
 
         addWeighted(absGradX,0.5,absGradY,0.5,0,gradTemp);
-
-
-
-      /*  IplImage newImg = gradTemp;
-
-        cvNormalize(&newImg,&newImg,0,255,CV_MINMAX);
-
-        Mat seep(&newImg);
-
-         temp = seep1 - seep;*/
 
 
 
@@ -99,13 +83,10 @@ void logoDetectionThread::run()
 
 
 
+        if(sum >= gL/3){
 
-
-
-        if(sum >= gL/2){
-              //qDebug() << sum << " " << gL/4 << " " << gL;
             emit noLogo(true);
-         // qDebug() << "Logo has disappeared";
+
         }else{
             emit noLogo(false);
         }
@@ -113,15 +94,8 @@ void logoDetectionThread::run()
 
         sum = 0;
 
-       // emit ldSendMat(temp);
-       // msleep(16.67);
+
     }
-   // emit ldSendMat(logoMat);
-
-
-
-
-
 
     this->quit();
 }

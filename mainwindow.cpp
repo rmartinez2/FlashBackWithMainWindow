@@ -40,8 +40,6 @@ MainWindow::MainWindow(QWidget *parent) :
     primaryOnComm = false;
     secondaryOnComm = false;
 
-
-
     playBackIndex = 0;
 
     ui->graphicsView->setAlignment(Qt::AlignLeft | Qt::AlignTop);
@@ -61,17 +59,11 @@ MainWindow::MainWindow(QWidget *parent) :
     formCtx1 = NULL;
     formCtx2 = NULL;
 
-    const char* filename = "C:\\Users\\Rene\\Desktop\\Test.mp2";
-    char* Path = "C:\\Users\\Rene\\Desktop\\L&O.mpg";
-    char* Path2 = "C:\\Users\\Rene\\\Desktop\\EyeForEye.mpg";
-
     const char* logo1 = "C:\\Users\\Rene\\Desktop\\LogoTheMiddleLg.bmp";
     const char* logo2 = "C:\\Users\\Rene\\Desktop\\LogoCW.bmp";
 
     recordFolder = "C:/FlashBackRecording";
-   // "C:\\Users\\Rene\\Desktop\\L&O.mpg"
 
-    //Demo
     if(avformat_open_input(&formCtx1,"C:\\Users\\Rene\\Desktop\\L&O.mpg",NULL,NULL) != 0){
         qDebug() << "Did not open video";
     }
@@ -110,10 +102,8 @@ MainWindow::MainWindow(QWidget *parent) :
           pCodecCtx = audioStream->codec;
           pCodecCtx->codec = pCodec;
 
-          setAudioFormat();
 
 
-        //qDebug() << "Could not find audio stream in video";
     }
 
     if(svIndex >= 0 && svIndex2 >= 0){
@@ -138,7 +128,7 @@ MainWindow::MainWindow(QWidget *parent) :
        vid1FPS = rat1.num/rat1.den;
        vid2FPS = rat2.num/rat2.den;
 
-       // qDebug() << rect.height() << " " << rect.width();
+
         QRect rect3;
         rect3.setHeight(rect.height() + 7);
         rect3.setWidth(rect.width() + 7);
@@ -154,15 +144,11 @@ MainWindow::MainWindow(QWidget *parent) :
 
 
     capTimer = new QTimer(this);
-    //cap.open(Path2);
-    //cap2.open(Path2);
-//    double fps = cap.get(CV_CAP_PROP_FPS);
-   // qDebug() << "FPS " << fps;
-//    capTimer->setInterval(1);
+
 
     playBackTimer = new QTimer(this);
     playBackTimer->setInterval(29.97);
-   // playBackTimer->setSingleShot(true);
+
 
 
     HCRateThread = new CutRateDetectionThread();
@@ -232,12 +218,10 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(bsDetectThread2,SIGNAL(isBlack(bool)),this,SLOT(recBS2(bool)));
     connect(LDThread2,SIGNAL(noLogo(bool)),this,SLOT(recNoLogo2(bool)));
 
-//    connect(capTimer,SIGNAL(timeout()),this,SLOT(drawMat2()));
     connect(playBackTimer,SIGNAL(timeout()),this,SLOT(playBackFromBuf()));
 
     connect(this,SIGNAL(ldcrbufferFull(bool)),this,SLOT(addFramesToThreads(bool)));
     connect(this,SIGNAL(bsbufferFull(bool)),this,SLOT(addFramesToBSThread(bool)));
-
 
     connect(vThread,SIGNAL(sendData1(byte*)),this,SLOT(drawMat(byte*)));
     connect(vThread,SIGNAL(sendData2(byte*)),this,SLOT(drawMat2(byte*)));
@@ -265,22 +249,13 @@ MainWindow::MainWindow(QWidget *parent) :
 
     connect(sMenu,SIGNAL(showChannelSelWin(bool)),chanSel,SLOT(setVisible(bool)));
 
-    connect(vThread,SIGNAL(sendBuffA(QByteArray)),this,SLOT(getBufferedAudio(QByteArray)));
 
-    //connect(playBackTimer,SIGNAL(timeout()),this,SLOT(askForFrames()));
-//    connect(this,SIGNAL(sendForFrames(bool)),vThread,SLOT(receiveRequestforFrames(bool)));
-//    connect(vThread,SIGNAL(sendVBuff1(QByteArray,int)),this,SLOT(parseForPlayBack(QByteArray,int)));
-
-
-
-
-   matViewer = new cvMatViewer();/* new FrameGLWidget();*/
+   matViewer = new cvMatViewer();
    pipViewer = new cvMatViewer();
    recsWin->setPIP(pipViewer);
 
-   //this->setCentralWidget(matViewer);
+
    ui->graphicsView->scene()->addWidget(matViewer);
-  // ui->graphicsView->scene()->addWidget(main);
    ui->graphicsView->scene()->addWidget(sMenu);
    ui->graphicsView->scene()->addWidget(sVis);
    ui->graphicsView->scene()->addWidget(notes);
@@ -305,13 +280,6 @@ MainWindow::MainWindow(QWidget *parent) :
    timer->start();
 
 
-
-//   if(cap.isOpened()){
-//   // usingImShow();
-//   //capTimer->start();
-//  // playBackTimer->start();
-//   }
-
 }
 
 
@@ -331,7 +299,6 @@ void MainWindow::setUpGView()
 
 void MainWindow::drawMat(byte *data)
 {
-
 
     Mat myFrame(rect.height()*2,rect.width()*2,CV_8UC3, data);
     fillBuffers(myFrame,true);
@@ -413,8 +380,7 @@ void MainWindow::fillBuffers(Mat mat, bool primaryCh)
 
 
         toggle ^= true;
-        //qDebug() << frameCounter << " " << toggle;
-        //qDebug() << bsBuffer.size();
+
     }
 
     if(frameCounter % 100 == 0){
@@ -464,8 +430,7 @@ void MainWindow::fillBuffers(Mat mat, bool primaryCh)
 
 
             toggle3 ^= true;
-            //qDebug() << frameCounter << " " << toggle;
-            //qDebug() << bsBuffer.size();
+
         }
 
         if(frameCounter2 % 100 == 0){
@@ -498,7 +463,7 @@ void MainWindow::recNoLogo(bool rec)
 {
      ldPrimary = rec;
 
-    // qDebug() << ldPrimary;
+
 }
 
 void MainWindow::recHighCuts2(bool rec)
@@ -524,7 +489,6 @@ void MainWindow::addFramesToThreads(bool primaryCh)
 {
     if(primaryCh){
     if(!HCRateThread->isRunning()){
-       // qDebug() << "HC Thread";
         HCRateThread->addFrames(crBuffer);
         if(flashBackOn)
         HCRateThread->start();
@@ -543,7 +507,6 @@ void MainWindow::addFramesToThreads(bool primaryCh)
 
     }else{
         if(!HCRateThread2->isRunning()){
-           // qDebug() << "HC Thread";
             HCRateThread2->addFrames(crBuffer2);
             if(flashBackOn)
             HCRateThread2->start();
@@ -569,7 +532,6 @@ void MainWindow::addFramesToBSThread(bool primaryCh)
 {
     if(primaryCh){
     if(!bsDetectThread->isRunning()){
-        //qDebug() << "BS Thread";
         bsDetectThread->readInFrames(bsBuffer);
         if(flashBackOn)
         bsDetectThread->start();
@@ -578,7 +540,6 @@ void MainWindow::addFramesToBSThread(bool primaryCh)
      bsBuffer.clear();
     }else{
         if(!bsDetectThread2->isRunning()){
-            //qDebug() << "BS Thread";
             bsDetectThread2->readInFrames(bsBuffer2);
             if(flashBackOn)
             bsDetectThread2->start();
@@ -686,7 +647,6 @@ void MainWindow::chkPrimaryForCB()
     if(primaryOnComm == false){
 
     if(ldPrimary && bsPrimary || ldPrimary && crPrimary){
-      //  qDebug() << "Primary on Commercial";
         primaryOnComm = true;
 
         if(!secondaryOnComm){
@@ -704,7 +664,6 @@ void MainWindow::chkPrimaryForCB()
     }else{
 
         if(!ldPrimary && !bsPrimary && !crPrimary){
-           // qDebug() << "Primary on programming";
             primaryOnComm = false;
 
             if(!primary){
@@ -714,7 +673,6 @@ void MainWindow::chkPrimaryForCB()
                 notes->updateTime();
                 notes->setVisible(true);
                 notesTimer->start();
-                //notify that primary stream is off commercial and switch
             }
 
 
@@ -728,7 +686,6 @@ void MainWindow::chkSecondaryForCB()
 {
     if(secondaryOnComm == false){
      if(ldSecondary && bsSecondary || ldSecondary && crSecondary){
-        qDebug() << "Secondary on Commercial";
        secondaryOnComm = true;
 
        if(primary){
@@ -737,7 +694,6 @@ void MainWindow::chkSecondaryForCB()
            notes->updateTime();
            notes->setVisible(true);
            notesTimer->start();
-           //notify secondary channel is on commercial
        }
 
 
@@ -747,7 +703,7 @@ void MainWindow::chkSecondaryForCB()
 
     }else{
         if(!ldSecondary && !bsSecondary && !crSecondary){
-       // qDebug() << "Secondary on programming";
+
         secondaryOnComm = false;
 
         if(primary){
@@ -756,7 +712,6 @@ void MainWindow::chkSecondaryForCB()
             notes->updateTime();
             notes->setVisible(true);
             notesTimer->start();
-            //notify secondary channel is off commercial
         }
 
     }
@@ -766,18 +721,16 @@ void MainWindow::chkSecondaryForCB()
 
 void MainWindow::chkPrimaryCutRate()
 {
-    //qDebug() << "Cut Rate Timer1 Time out";
+
     if(!crPrimary){
-       // qDebug() << "Regular Cut Rate 1";
         chkPrimaryForCB();
     }
 }
 
 void MainWindow::chkSecondaryCutRate()
 {
-    //qDebug() << "Cut Rate Timer2 Time out";
+
    if(!crSecondary){
-      // qDebug() << "Regular Cut Rate 2";
        chkSecondaryForCB();
    }
 }
@@ -794,7 +747,6 @@ void MainWindow::toggleFlashBack(bool on)
         LDThread->start();
         LDThread2->start();
 
-      //  qDebug() << "FB on";
 
         flashBackOn = true;
 
@@ -809,8 +761,7 @@ void MainWindow::toggleFlashBack(bool on)
 
         LDThread->quit();
         LDThread2->quit();
-       // qDebug() << "FB off";
-        //also add a graphic that Flashback is off
+
         flashBackOn = false;
         timer->stop();
     }
@@ -819,7 +770,7 @@ void MainWindow::toggleFlashBack(bool on)
 void MainWindow::changeToPIP(bool inPIP)
 {
     this->isPIP = inPIP;
-    //qDebug() << inPIP;
+
 }
 
 void MainWindow::recordPrimaryStream()
@@ -833,7 +784,6 @@ void MainWindow::recordPrimaryStream()
     if(!writer1.isOpened()){
         qDebug() << "Failed to open writer";
     }else{
-        //qDebug() << "Opened";
         primeRec = true;
     }
 }
@@ -844,13 +794,12 @@ void MainWindow::recordSecondaryStream()
     sz.height = rect.height();
     sz.width = rect.width();
 
-   // string secPath = recordFolder.toStdString();
     writer2.open(recordFolder.toStdString() + "/SecondaryStream.avi",CV_FOURCC('M','P','E','G'),vid2FPS,sz,true);
 
     if(!writer2.isOpened()){
         qDebug() << "Failed to open writer";
     }else{
-       // qDebug() << "Opened";
+
         secRec = true;
     }
 }
@@ -873,13 +822,11 @@ void MainWindow::setUpPB(const char *playBack)
     bsDetectThread->quit();
     bsDetectThread2->quit();
 
-   // vThread->exit();
     emit breakVthread(true);
     while(vThread->isRunning()){
 
         qDebug() << "Vthread is running";
     }
-   // delete vThread;
 
     timer->stop();
     playBackTimer->stop();
@@ -887,7 +834,6 @@ void MainWindow::setUpPB(const char *playBack)
     flashBackOn = false;
 
     if(!vThread->isRunning()){
-       // emit breakVthread(false);
 
         if(cap.isOpened()){
             capTimer->stop();
@@ -904,7 +850,6 @@ void MainWindow::setUpPB(const char *playBack)
             vThread->start();
             playBackTimer->start();
         }
-        //drawMatCV();
     }
 }
 
@@ -919,93 +864,6 @@ void MainWindow::closeNote()
 
 }
 
-void MainWindow::getBufferedAudio(QByteArray arry)
-{
-
-   buffered.append(arry);
-
-   if(aYes){
-
-       if(output->state() != QAudio::ActiveState){
-           aBuf.close();
-           aBuf.setBuffer(&buffered);
-           aBuf.open(QBuffer::ReadOnly);
-           aBuf.seek(0);
-           output->start(&aBuf);
-
-       }
-   }
-    //qDebug() << "read frm buffer " << buffered.size();
-
-}
-
-void MainWindow::setAudioFormat()
-{
-
-    aformat.setSampleRate(48000);
-    aformat.setCodec("audio/pcm");
-    aformat.setChannelCount(2);
-    aformat.setSampleSize(16);
-    aformat.setByteOrder(QAudioFormat::LittleEndian);
-    aformat.setSampleType(QAudioFormat::SignedInt);
-
-    QAudioDeviceInfo info(QAudioDeviceInfo::defaultOutputDevice());
-    if(info.isFormatSupported(aformat)){
-        output = new QAudioOutput(aformat,this);
-        qDebug() << "output set";
-        aYes = true;
-    }else{
-        aYes = false;
-        qDebug() << "output not set";
-    }
-
-
-
-
-
-}
-
-void MainWindow::askForFrames()
-{
-
-    //emit sendForFrames(true);
-
-//    for(int i = 0; i < mainBuffer.size(); i++){
-//        Mat temp = mainBuffer.at(i);
-
-//        imshow("test", temp);
-
-//        waitKey(30);
-
-//    }
-
-}
-
-void MainWindow::parseForPlayBack(QByteArray data, int frameSize)
-{
-
-   // byte* dataFrame = (byte*) malloc(4*sizeof(byte));
-   // QString dataString;
-   // qDebug() << frameSize;
-   // qDebug() << data.size();
-    //qDebug() << "About to Die";
-//    for(int i = 0; i < data.size(); i++){
-
-//        if(i != 0 && i % frameSize == 0){
-//            qDebug() << "Frame ready ";
-
-//            //dataString.clear();
-//            break;
-//        }else{
-//            qDebug() << "Append to holder ";
-//           // dataString.append(data.at(i));
-//        }
-//    }
-
-//     Mat myFrame(rect.height()*2,rect.width()*2,CV_8UC3, dataFrame);
-//     imshow("Work Please",myFrame);
-//     waitKey(0);
-}
 
 
 
